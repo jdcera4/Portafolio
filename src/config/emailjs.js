@@ -6,9 +6,9 @@
 // 4. Obtener tu Public Key
 
 export const emailjsConfig = {
-  serviceId: 'your_service_id', // Reemplaza con tu Service ID
-  templateId: 'your_template_id', // Reemplaza con tu Template ID
-  publicKey: 'your_public_key' // Reemplaza con tu Public Key
+  serviceId: 'TU_SERVICE_ID_AQUI', // Ejemplo: 'service_abc123'
+  templateId: 'TU_TEMPLATE_ID_AQUI', // Ejemplo: 'template_xyz789'
+  publicKey: 'TU_PUBLIC_KEY_AQUI' // Ejemplo: 'abcdef123456'
 };
 
 // Template de ejemplo para EmailJS:
