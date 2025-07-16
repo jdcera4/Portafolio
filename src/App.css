@@ -189,8 +189,51 @@ html {
   transition: transform 0.3s ease;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Contact buttons */
+.contact-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contact-btn {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #667eea;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.contact-btn:hover {
+  background: #667eea;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.contact-btn.whatsapp {
+  color: #25D366;
+  border-color: #25D366;
+}
+
+.contact-btn.whatsapp:hover {
+  background: #25D366;
+  color: #ffffff;
 }
 
 /* Footer */
@@ -229,5 +272,16 @@ html {
   
   .section-title {
     font-size: 2rem;
+  }
+  
+  .contact-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contact-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
   }
 }
