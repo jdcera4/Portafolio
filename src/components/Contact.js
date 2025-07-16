@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import { emailjsConfig } from '../config/emailjs';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +24,54 @@ const Contact = () => {
     setStatus('');
 
     try {
-      // Por ahora, simulamos el envío y redirigimos al email
-      // En producción, aquí iría la configuración de EmailJS
-      
-      // Crear el contenido del email
+      // Verificar si EmailJS está configurado
+      if (emailjsConfig.serviceId === 'service_xxxxxxx' ||
+        emailjsConfig.templateId === 'template_xxxxxxx' ||
+        emailjsConfig.publicKey === 'xxxxxxxxxxxxxxx') {
+
+        // Si no está configurado, usar método alternativo
+        const subject = `Mensaje de ${formData.name} desde el portafolio`;
+        const body = `
+Nombre: ${formData.name}
+Email: ${formData.email}
+
+Mensaje:
+${formData.message}
+        `;
+
+        const mailtoLink = `mailto:jdcera4@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.open(mailtoLink, '_blank');
+
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        alert('¡Se abrirá tu cliente de email para enviar el mensaje! Para envío automático, configura EmailJS siguiendo las instrucciones en EMAILJS_SETUP.md');
+
+      } else {
+        // EmailJS está configurado - envío directo
+        const templateParams = {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_email: 'jdcera4@gmail.com'
+        };
+
+        await emailjs.send(
+          emailjsConfig.serviceId,
+          emailjsConfig.templateId,
+          templateParams,
+          emailjsConfig.publicKey
+        );
+
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        alert('¡Mensaje enviado exitosamente! Te contactaré pronto.');
+      }
+
+    } catch (error) {
+      console.error('Error al enviar el mensaje:', error);
+      setStatus('error');
+
+      // Fallback al método alternativo si EmailJS falla
       const subject = `Mensaje de ${formData.name} desde el portafolio`;
       const body = `
 Nombre: ${formData.name}
@@ -35,18 +80,11 @@ Email: ${formData.email}
 Mensaje:
 ${formData.message}
       `;
-      
-      // Abrir cliente de email del usuario
+
       const mailtoLink = `mailto:jdcera4@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.open(mailtoLink, '_blank');
-      
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      alert('¡Se abrirá tu cliente de email para enviar el mensaje! Si no se abre automáticamente, puedes contactarme directamente.');
-    } catch (error) {
-      console.error('Error al procesar el mensaje:', error);
-      setStatus('error');
-      alert('Hubo un error. Por favor, contáctame directamente por WhatsApp o email.');
+
+      alert('Hubo un problema con el envío automático. Se abrirá tu cliente de email como alternativa.');
     } finally {
       setIsLoading(false);
     }
@@ -101,10 +139,10 @@ ${formData.message}
           <div style={{ marginTop: '2rem', textAlign: 'center' }}>
             <p>O contáctame directamente:</p>
             <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-              <a 
+              <a
                 href="mailto:jdcera4@gmail.com"
-                style={{ 
-                  color: '#667eea', 
+                style={{
+                  color: '#667eea',
                   textDecoration: 'none',
                   fontSize: '1.1rem',
                   display: 'flex',
@@ -116,14 +154,14 @@ ${formData.message}
                   transition: 'all 0.3s ease'
                 }}
               >
-                📧 jdcera4@gmail.com
+                📧Email
               </a>
-              <a 
+              <a
                 href="https://wa.me/573022576761?text=Hola%20Jhojan,%20me%20interesa%20hablar%20contigo%20sobre%20un%20proyecto"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ 
-                  color: '#25D366', 
+                style={{
+                  color: '#25D366',
                   textDecoration: 'none',
                   fontSize: '1.1rem',
                   display: 'flex',
@@ -137,12 +175,12 @@ ${formData.message}
               >
                 📱 WhatsApp
               </a>
-              <a 
-                href="https://github.com/jdcera4" 
-                target="_blank" 
+              <a
+                href="https://github.com/jdcera4"
+                target="_blank"
                 rel="noopener noreferrer"
-                style={{ 
-                  color: '#667eea', 
+                style={{
+                  color: '#667eea',
                   textDecoration: 'none',
                   fontSize: '1.1rem',
                   display: 'flex',
